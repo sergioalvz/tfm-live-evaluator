@@ -1,4 +1,4 @@
-var express = require('express');
+var expressio = require('express.io');
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 
-var app = express();
+var app = expressio();
+app.http().io();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,9 +20,35 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressio.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+
+//  =============================================================
+// |                         REAL TIME                           |
+//  =============================================================
+var config = require('./config/configuration.json');
+
+var Twit  = require('twit');
+var Learning = require('./src/learning');
+
+var credentials = require('./config/twitter.json');
+var twitter = new Twit({
+  consumer_key: credentials.consumer_key,
+  consumer_secret: credentials.consumer_secret,
+  access_token: credentials.access_token,
+  access_token_secret: credentials.access_token_secret
+});
+var stream = twitter.stream('statuses/filter', config.streaming_options);
+
+app.io.route('streaming', {
+  start: function(req) {
+    stream.on('tweet', function(tweet) {
+      var evaluation = Learning.evaluate(tweet, req);
+    });
+  }
+});
+//  =============================================================
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -29,8 +56,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-
-/// error handlers
 
 // development error handler will print stacktrace
 if (app.get('env') === 'development') {
@@ -43,14 +68,4 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production error handler no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
-
-
-module.exports = app;
+app.listen(7076);
