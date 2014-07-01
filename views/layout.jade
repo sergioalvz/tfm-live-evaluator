@@ -2,6 +2,14 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/fontello/css/fontello.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+
+    script(src="/javascripts/streaming_module.js")
+    script(src="/javascripts/lib/jquery.js")
+    script(src="/javascripts/lib/handlebars.js")
+    script(src="/javascripts/lib/underscore.js")
+    script(src="/socket.io/socket.io.js")
+
   body
     block content

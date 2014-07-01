@@ -1,11 +1,16 @@
-var expressio = require('express.io');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
+var expressio    = require('express.io');
+var path         = require('path');
+var favicon      = require('static-favicon');
+var logger       = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var bodyParser   = require('body-parser');
+var twit         = require('twit');
 
-var routes = require('./routes/index');
+var learning     = require('./src/learning');
+var routes       = require('./routes/index');
+
+var config       = require('./config/configuration.json');
+var credentials  = require('./config/twitter.json');
 
 var app = expressio();
 app.http().io();
@@ -27,24 +32,19 @@ app.use('/', routes);
 //  =============================================================
 // |                         REAL TIME                           |
 //  =============================================================
-var config = require('./config/configuration.json');
-
-var Twit  = require('twit');
-var Learning = require('./src/learning');
-
-var credentials = require('./config/twitter.json');
-var twitter = new Twit({
+var twitter = new twit({
   consumer_key: credentials.consumer_key,
   consumer_secret: credentials.consumer_secret,
   access_token: credentials.access_token,
   access_token_secret: credentials.access_token_secret
 });
+
 var stream = twitter.stream('statuses/filter', config.streaming_options);
 
 app.io.route('streaming', {
   start: function(req) {
     stream.on('tweet', function(tweet) {
-      var evaluation = Learning.evaluate(tweet, req);
+      var evaluation = learning.evaluate(tweet, req);
     });
   }
 });

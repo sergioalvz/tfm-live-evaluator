@@ -1,7 +1,22 @@
 extends layout
 
 block content
-  h1 Live streaming
+  header
+    h1 Live streaming
 
-  script(src="/socket.io/socket.io.js")
-  script(src="/javascripts/streaming.js")
+  div.page-wrapper
+    button.start-streaming Stream!
+    div.localized-tweets
+      script#tweet-template(type='text/x-handlebars')
+        div.tweet
+          p.rate
+            i(class='{{validation}}')
+          p.user {{user}}
+          p.location {{location}}
+          p.text {{text}}
+  script.
+    $('button.start-streaming').click(function(){
+      var $container = $('div.localized-tweets');
+      App.StreamingModule.startStreaming($container);
+      $(this).prop('disabled', true);
+    });

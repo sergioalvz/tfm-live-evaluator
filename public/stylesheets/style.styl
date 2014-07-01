@@ -1,3 +1,51 @@
 *
-  padding: 0
-  margin: 0
+  padding 0
+  margin 0
+  font-size 10px
+
+header
+  padding 1em 0 1em 1em
+
+  h1
+    font-size 3em
+
+div.page-wrapper
+  padding 0 1em
+
+  div.localized-tweets
+    padding 1em 0
+
+    div.tweet
+      background-color rgb(247, 247, 245)
+      box-shadow .1em .1em .5em #888888
+
+      padding 2em
+      margin-bottom 2em
+
+      display block
+      max-width 30em
+      float left
+      margin-right 1.5em
+      p
+        font-size 1.8em
+        &.rate
+          i
+            float right
+            font-size 1em
+        &.user
+          font-weight bold
+        &.location
+          font-style italic
+        &.text
+          margin-top .5em
+
+button
+  &.start-streaming
+    background-image -webkit-linear-gradient(#88af39, #690)
+    border-radius .4em
+    border .1em solid rgb(45, 128, 19)
+    color #FFF
+    cursor pointer
+    font-size 1.3em
+    padding 1em
+    width 10em
