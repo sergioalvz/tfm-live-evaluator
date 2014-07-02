@@ -1,8 +1,4 @@
-var App = App || {};
-
-App.StreamingModule = (function() {
-  var SCORE_THRESHOLD = 0.6;
-
+var StreamingModule = (function() {
   var $evaluationContainer = null;
 
   var startStreaming = function($container) {
@@ -14,25 +10,32 @@ App.StreamingModule = (function() {
   };
 
   var processTweet = function(evaluation) {
-    var score = parseFloat(evaluation.evaluation);
+    appendToEvaluationContainer(evaluation);
+    addToHeatmap(evaluation.tweet);
+  };
 
-    if(score > SCORE_THRESHOLD) {
-      var fields = extractTweetFields(evaluation.tweet);
-      var attributes = _({}).extend(fields, { validation: "icon-thumbs-up" });
+  var addToHeatmap = function(tweet) {
+    if(tweet.geo) MapModule.add(tweet.geo.coordinates[0], tweet.geo.coordinates[1]);
+  };
 
-      var source   = $("#tweet-template").html();
-      var template = Handlebars.compile(source);
-      var html     = template(attributes);
+  var appendToEvaluationContainer = function(evaluation) {
+    var tweet = evaluation.tweet;
+    var validation = evaluation.isOk ? "icon-thumbs-up" : "icon-thumbs-down";
 
-      $evaluationContainer.append(html);
-    }
+    var fields = extractTweetFields(tweet);
+    var attributes = _({}).extend(fields, { validation: validation });
+
+    var source   = $("#tweet-template").html();
+    var template = Handlebars.compile(source);
+    var html     = template(attributes);
+
+    $evaluationContainer.append(html);
   };
 
   var extractTweetFields = function(tweet) {
     var user     = '@' + tweet.user.screen_name;
     var location = tweet.user.location;
     var text     = tweet.text;
-    var place    = tweet.place && tweet.place.full_name;
 
     return {
       user: user,

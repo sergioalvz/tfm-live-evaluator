@@ -2,10 +2,15 @@ extends layout
 
 block content
   header
-    h1 Live streaming
+    h1
+      span.live Live
+      span.streaming Streaming
+    p TFM | Sergio Álvarez Suárez
 
   div.page-wrapper
-    button.start-streaming Stream!
+    div.map-canvas
+    div.actions.clear
+      button.start-streaming.green Conectar
     div.localized-tweets
       script#tweet-template(type='text/x-handlebars')
         div.tweet
@@ -15,8 +20,11 @@ block content
           p.location {{location}}
           p.text {{text}}
   script.
+    var $mapContainer = $('div.map-canvas');
+    MapModule.install($mapContainer);
+
     $('button.start-streaming').click(function(){
-      var $container = $('div.localized-tweets');
-      App.StreamingModule.startStreaming($container);
+      var $tweetsContainer = $('div.localized-tweets');
+      StreamingModule.startStreaming($tweetsContainer);
       $(this).prop('disabled', true);
     });

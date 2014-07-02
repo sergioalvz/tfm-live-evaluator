@@ -1,6 +1,8 @@
 var shell  = require('shelljs');
 var config = require('../config/configuration.json');
 
+var SCORE_TRESHOLD = 0.7;
+
 var clear = function(text) {
   var clean = "";
 
@@ -24,6 +26,21 @@ var formatInput = function(user, location, text) {
   return '|Tweet ' + user + ' ' + location + ' ' + text;
 };
 
+var isCorrectlyMarked = function(tweet) {
+  if(!tweet.geo) return false;
+
+  var lat = tweet.geo.coordinates[0];
+  var lng = tweet.geo.coordinates[1];
+
+  var isOk = false;
+
+  config.local.boundingBoxes.forEach(function(bb) {
+    if(bb.sw.lat <= lat && bb.ne.lat >= lat && bb.sw.lng <= lng && bb.ne.lng >= lng) isOk =  true;
+  });
+
+  return isOk;
+};
+
 var evaluate = function(tweet, req) {
   var user     = tweet.user.screen_name;
   var location = tweet.user.location;
@@ -32,7 +49,15 @@ var evaluate = function(tweet, req) {
   var command = 'echo "' + formatInput(user, location, text) + '" | nc ' + config.vw_host + ' ' + config.vw_port;
 
   shell.exec(command, { silent: true }, function(code, output){
-    req.io.emit('tweet', { evaluation: output, tweet: tweet });
+    if(code === 0) {
+      var score = parseFloat(output);
+      if(score > SCORE_TRESHOLD) {
+        req.io.emit('tweet', {
+          isOk: isCorrectlyMarked(tweet),
+          tweet: tweet
+        });
+      }
+    }
   });
 };
 

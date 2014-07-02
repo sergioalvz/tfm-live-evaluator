@@ -1,37 +1,46 @@
 *
-  padding 0
-  margin 0
   font-size 10px
+  margin 0
+  padding 0
 
 header
   padding 1em 0 1em 1em
-
+  border-bottom 5px solid rgb(155,89,182)
+  box-shadow: 0 2px 2px rgba(50, 50, 50, 0.15);
   h1
     font-size 3em
+    font-family: 'Alfa Slab One', cursive;
+    span
+      font-size 1em
+      &.live
+        color rgb(231,76,60)
+      &.streaming
+        color rgb(60,224,164)
+  p
+    font-family: 'Oxygen', sans-serif;
+    font-size 1.5em
 
 div.page-wrapper
-  padding 0 1em
-
+  overflow: hidden;
+  div.actions
+    padding 1em
+    button
+      margin 0 auto
+  div.map-canvas
+    height 40em
   div.localized-tweets
-    padding 1em 0
-
+    padding 5em
     div.tweet
       background-color rgb(247, 247, 245)
       box-shadow .1em .1em .5em #888888
-
       padding 2em
       margin-bottom 2em
-
-      display block
-      max-width 30em
-      float left
-      margin-right 1.5em
       p
         font-size 1.8em
         &.rate
           i
             float right
-            font-size 1em
+            font-size 1.5em
         &.user
           font-weight bold
         &.location
@@ -40,12 +49,17 @@ div.page-wrapper
           margin-top .5em
 
 button
-  &.start-streaming
+  &.green
     background-image -webkit-linear-gradient(#88af39, #690)
-    border-radius .4em
     border .1em solid rgb(45, 128, 19)
+    border-radius .4em
     color #FFF
     cursor pointer
+    display block
     font-size 1.3em
     padding 1em
     width 10em
+
+    &:disabled
+      opacity 0.5
+      cursor auto

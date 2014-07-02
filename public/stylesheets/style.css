@@ -1,36 +1,57 @@
 * {
-  padding: 0;
-  margin: 0;
   font-size: 10px;
+  margin: 0;
+  padding: 0;
 }
 header {
   padding: 1em 0 1em 1em;
+  border-bottom: 5px solid #9b59b6;
+  box-shadow: 0 2px 2px rgba(50,50,50,0.15);
 }
 header h1 {
   font-size: 3em;
+  font-family: 'Alfa Slab One', cursive;
+}
+header h1 span {
+  font-size: 1em;
+}
+header h1 span.live {
+  color: #e74c3c;
+}
+header h1 span.streaming {
+  color: #3ce0a4;
+}
+header p {
+  font-family: 'Oxygen', sans-serif;
+  font-size: 1.5em;
 }
 div.page-wrapper {
-  padding: 0 1em;
+  overflow: hidden;
+}
+div.page-wrapper div.actions {
+  padding: 1em;
+}
+div.page-wrapper div.actions button {
+  margin: 0 auto;
+}
+div.page-wrapper div.map-canvas {
+  height: 40em;
 }
 div.page-wrapper div.localized-tweets {
-  padding: 1em 0;
+  padding: 5em;
 }
 div.page-wrapper div.localized-tweets div.tweet {
   background-color: #f7f7f5;
   box-shadow: 0.1em 0.1em 0.5em #888;
   padding: 2em;
   margin-bottom: 2em;
-  display: block;
-  max-width: 30em;
-  float: left;
-  margin-right: 1.5em;
 }
 div.page-wrapper div.localized-tweets div.tweet p {
   font-size: 1.8em;
 }
 div.page-wrapper div.localized-tweets div.tweet p.rate i {
   float: right;
-  font-size: 1em;
+  font-size: 1.5em;
 }
 div.page-wrapper div.localized-tweets div.tweet p.user {
   font-weight: bold;
@@ -41,13 +62,18 @@ div.page-wrapper div.localized-tweets div.tweet p.location {
 div.page-wrapper div.localized-tweets div.tweet p.text {
   margin-top: 0.5em;
 }
-button.start-streaming {
+button.green {
   background-image: -webkit-linear-gradient(#88af39, #690);
-  border-radius: 0.4em;
   border: 0.1em solid #2d8013;
+  border-radius: 0.4em;
   color: #fff;
   cursor: pointer;
+  display: block;
   font-size: 1.3em;
   padding: 1em;
   width: 10em;
+}
+button.green:disabled {
+  opacity: 0.5;
+  cursor: auto;
 }
